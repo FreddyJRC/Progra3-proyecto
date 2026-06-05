@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app version="6.1" xmlns="https://jakarta.ee/xml/ns/jakartaee" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="https://jakarta.ee/xml/ns/jakartaee https://jakarta.ee/xml/ns/jakartaee/web-app_6_1.xsd">
+    <servlet>
+        <servlet-name>medico</servlet-name>
+        <servlet-class>View.medico</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>citasMedico</servlet-name>
+        <servlet-class>View.citasMedico</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>paciente</servlet-name>
+        <servlet-class>View.paciente</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>pacienteDetalle</servlet-name>
+        <servlet-class>View.pacienteDetalle</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>cita</servlet-name>
+        <servlet-class>View.cita</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>medico</servlet-name>
+        <url-pattern>/medico</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>citasMedico</servlet-name>
+        <url-pattern>/medico/citas</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>paciente</servlet-name>
+        <url-pattern>/paciente</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>pacienteDetalle</servlet-name>
+        <url-pattern>/paciente/detalle</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>cita</servlet-name>
+        <url-pattern>/cita</url-pattern>
+    </servlet-mapping>
+</web-app>

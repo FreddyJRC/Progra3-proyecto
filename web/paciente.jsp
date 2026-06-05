@@ -26,13 +26,13 @@
                     <a class="nav-link" href="/Proyecto">Home</a>
                   </li>
                   <li class="nav-item">
-                    <a class="nav-link" href="cita.jsp">Citas</a>
+                    <a class="nav-link" href="cita">Citas</a>
                   </li>
                   <li class="nav-item">
-                    <a class="nav-link" href="medico.jsp">Medicos</a>
+                    <a class="nav-link" href="medico">Medicos</a>
                   </li>
                   <li class="nav-item">
-                    <a class="nav-link active" aria-current="page" href="paciente.jsp">Pacientes</a>
+                    <a class="nav-link active" aria-current="page" href="paciente">Pacientes</a>
                   </li>
                 </ul>
               </div>
@@ -43,7 +43,7 @@
             <div class="row">
               <div class="col">
                   <h2>Buscar Paciente</h2>
-                  <form action="paciente/detalle.jsp" method="get">
+                  <form action="paciente/detalle" method="get">
                     <div class="input-group mb-3">
                         <input type="text" class="form-control" placeholder="ID Paciente" aria-label="ID Paciente" aria-describedby="button-addon2" id="dpi" name="dpi">
                         <button class="btn btn-outline-secondary" type="submit" id="button-addon2">Buscar</button>

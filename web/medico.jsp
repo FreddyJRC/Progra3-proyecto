@@ -4,6 +4,8 @@
     Author     : freddyramirez
 --%>
 
+<%@page import="Modelo.Medico"%>
+<%@page import="java.util.ArrayList"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html>
@@ -26,13 +28,13 @@
                             <a class="nav-link" href="/Proyecto">Home</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="cita.jsp">Citas</a>
+                            <a class="nav-link" href="cita">Citas</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link active" aria-current="page" href="medico.jsp">Medicos</a>
+                            <a class="nav-link active" aria-current="page" href="medico">Medicos</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="paciente.jsp">Pacientes</a>
+                            <a class="nav-link" href="paciente">Pacientes</a>
                         </li>
                     </ul>
                 </div>
@@ -52,12 +54,26 @@
                       </tr>
                     </thead>
                     <tbody>
-                      <tr data-href="medico/citas.jsp?id=1">
-                        <th scope="row">1</th>
-                        <td>Mark</td>
-                        <td>Otto</td>
-                        <td>@mdo</td>
+                        <%
+                            if (request.getAttribute("medicos") != null) {
+                                ArrayList<Medico> medicos = (ArrayList<Medico>) request.getAttribute("medicos");
+                                for (Medico m : medicos) {
+                        %>
+                        <tr data-href="medico/citas?id=<%= m.getMedico_id() %>">
+                            <th scope="row"><%= m.getMedico_id() %></th>
+                            <td><%= m.getNombre() %></td>
+                            <td><%= m.getApellido() %></td>
+                            <td><%= m.getEspecialidad() %></td>
+                        </tr>
+                        <%
+                                    
+                                    }
+                            } else {
+                        %>
+                      <tr>
+                          <th class="text-center" scope="row" colspan="4">- No se encontraron medicos registrados -</th>
                       </tr>
+                      <% } %>
                     </tbody>
                 </table>
               </div>

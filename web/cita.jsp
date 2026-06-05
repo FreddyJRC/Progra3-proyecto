@@ -26,13 +26,13 @@
                     <a class="nav-link" href="/Proyecto">Home</a>
                   </li>
                   <li class="nav-item">
-                    <a class="nav-link active" aria-current="page" href="cita.jsp">Citas</a>
+                    <a class="nav-link active" aria-current="page" href="cita">Citas</a>
                   </li>
                   <li class="nav-item">
-                    <a class="nav-link" href="medico.jsp">Medicos</a>
+                    <a class="nav-link" href="medico">Medicos</a>
                   </li>
                   <li class="nav-item">
-                    <a class="nav-link" href="paciente.jsp">Pacientes</a>
+                    <a class="nav-link" href="paciente">Pacientes</a>
                   </li>
                 </ul>
               </div>
