@@ -5,14 +5,17 @@
 package View;
 
 import Modelo.Medico;
+import Modelo.Database;
+import Modelo.RequestsProcessor;
 import jakarta.servlet.RequestDispatcher;
 import java.io.IOException;
-import java.io.PrintWriter;
+import java.io.IOException;
+import java.util.List;
+import java.util.concurrent.Future;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import java.util.ArrayList;
 
 /**
  *
@@ -32,15 +35,18 @@ public class medico extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         
-        ArrayList<Medico> medicos = new ArrayList<>();
-        for (int i = 0; i < 10; i++) {
-            Medico m = new Medico(i, "Freddy", "Ramirez", "interna");
-            medicos.add(m);
+        Future<?> future = RequestsProcessor.getInstance().submit(() -> {
+            List<Medico> medicos = Database.getInstance().getMedicos();
+            request.setAttribute("medicos", medicos);
+        });
+        
+        try {
+            future.get();
+        } catch (Exception e) {
+            throw new ServletException("Error al cargar médicos", e);
         }
         
-        request.setAttribute("medicos", medicos);
-        RequestDispatcher dispatcher = request.getRequestDispatcher(
-          "medico.jsp");
+        RequestDispatcher dispatcher = request.getRequestDispatcher("medico.jsp");
         dispatcher.forward(request, response);
     }
 

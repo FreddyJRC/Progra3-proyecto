@@ -4,9 +4,12 @@
  */
 package View;
 
+import Modelo.Paciente;
+import Modelo.Database;
+import Modelo.RequestsProcessor;
 import jakarta.servlet.RequestDispatcher;
 import java.io.IOException;
-import java.io.PrintWriter;
+import java.util.concurrent.Future;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
@@ -46,7 +49,30 @@ public class pacienteDetalle extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        processRequest(request, response);
+        String dpiParam = request.getParameter("dpi");
+        if (dpiParam == null || dpiParam.isEmpty()) {
+            response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Error DPI");
+            return;
+        }
+        int dpi = Integer.parseInt(dpiParam);
+        
+        Future<?> future = RequestsProcessor.getInstance().submit(() -> {
+            Paciente p = Database.getInstance().getPacienteById(dpi);
+            if (p != null) {
+                request.setAttribute("paciente", p);
+            } else {
+                request.setAttribute("error", "Paciente no encontrado");
+            }
+        });
+        
+        try {
+            future.get();
+        } catch (Exception e) {
+            throw new ServletException("Error al buscar paciente", e);
+        }
+        
+        RequestDispatcher dispatcher = request.getRequestDispatcher("detalle.jsp");
+        dispatcher.forward(request, response);
     }
 
     /**

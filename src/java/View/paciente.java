@@ -4,9 +4,12 @@
  */
 package View;
 
+import Modelo.Paciente;
+import Modelo.Database;
+import Modelo.RequestsProcessor;
 import jakarta.servlet.RequestDispatcher;
 import java.io.IOException;
-import java.io.PrintWriter;
+import java.util.concurrent.Future;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
@@ -60,17 +63,33 @@ public class paciente extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        processRequest(request, response);
+        int pacienteId = Integer.parseInt(request.getParameter("paciente_id"));
+        String nombre = request.getParameter("nombre");
+        String apellido = request.getParameter("apellido");
+        int edad = Integer.parseInt(request.getParameter("edad"));
+        
+        Paciente p = new Paciente(pacienteId, nombre, apellido, edad);
+        
+        Future<?> future = RequestsProcessor.getInstance().submit(() -> {
+            try {
+                Database.getInstance().agregarPaciente(p);
+                request.setAttribute("mensaje", "Paciente registrado");
+                request.setAttribute("paciente", p);
+            } catch (Exception e) {
+                request.setAttribute("error", e.getMessage());
+            }
+        });
+        
+        try {
+            future.get();
+        } catch (Exception e) {
+            throw new ServletException("Error al registrar paciente", e);
+        }
+        
+        // Redirige de vuelta al formulario con mensaje
+        RequestDispatcher dispatcher = request.getRequestDispatcher("paciente.jsp");
+        dispatcher.forward(request, response);
     }
-
-    /**
-     * Returns a short description of the servlet.
-     *
-     * @return a String containing servlet description
-     */
-    @Override
-    public String getServletInfo() {
-        return "Short description";
-    }// </editor-fold>
-
 }
+
+   
