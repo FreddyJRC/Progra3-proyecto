@@ -87,8 +87,7 @@ public class paciente extends HttpServlet {
         }
         
         // Redirige de vuelta al formulario con mensaje
-        RequestDispatcher dispatcher = request.getRequestDispatcher("paciente.jsp");
-        dispatcher.forward(request, response);
+        processRequest(request, response);
     }
 }
 

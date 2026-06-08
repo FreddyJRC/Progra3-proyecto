@@ -4,6 +4,10 @@
  */
 package View;
 
+import Modelo.Cita;
+import Modelo.Database;
+import Modelo.Medico;
+import Modelo.RequestsProcessor;
 import jakarta.servlet.RequestDispatcher;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -11,6 +15,8 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import java.util.List;
+import java.util.concurrent.Future;
 
 /**
  *
@@ -29,6 +35,23 @@ public class citasMedico extends HttpServlet {
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+        
+        int medicoId = Integer.parseInt(request.getParameter("id"));
+        
+        Future<?> future = RequestsProcessor.getInstance().submit(() -> {
+            Medico medicos = Database.getInstance().getMedicoById(medicoId);
+            request.setAttribute("medico", medicos);
+            
+            List<Cita> citasMedico = Database.getInstance().getCitasByMedico(medicoId);
+            request.setAttribute("citas", citasMedico);
+        });
+        
+        try {
+            future.get();
+        } catch (Exception e) {
+            throw new ServletException("Error al cargar médicos", e);
+        }
+        
         RequestDispatcher dispatcher = request.getRequestDispatcher(
           "citas.jsp");
         dispatcher.forward(request, response);
@@ -60,6 +83,26 @@ public class citasMedico extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+        
+        int citaId = Integer.parseInt(request.getParameter("cita_id"));
+        String estado = request.getParameter("estado");
+        
+        Future<?> future = RequestsProcessor.getInstance().submit(() -> {
+            try {
+                Cita cita = Database.getInstance().actualizarEstadoCita(citaId, estado);
+                request.setAttribute("mensaje", "Cita actualizada");
+                request.setAttribute("cita", cita);
+            } catch (Exception e) {
+                request.setAttribute("error", e.getMessage());
+            }
+        });
+        
+        try {
+            future.get();
+        } catch (Exception e) {
+            throw new ServletException("Error al actualizando cita", e);
+        }
+        
         processRequest(request, response);
     }
 

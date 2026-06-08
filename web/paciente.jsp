@@ -54,23 +54,36 @@
 
             <div class="row">
                 <div class="col">
+                    <%
+                        if (request.getAttribute("mensaje") != null) {
+                            String msj = (String) request.getAttribute("mensaje");
+                    %>
+                        <div class="alert alert-primary" role="alert">
+                            <%= msj %>
+                        </div>
+                    <% } %>
+                </div>
+            </div>
+            
+            <div class="row">
+                <div class="col">
                     <h2>Crear Paciente</h2>
-                    <form>
+                    <form method="POST">
                         <div class="mb-3">
                           <label for="paciente_id" class="form-label">DPI Paciente</label>
-                          <input type="number" class="form-control" id="paciente_id">
-                        </div
+                          <input type="number" class="form-control" id="paciente_id" name="paciente_id">
+                        </div>
                         <div class="mb-3">
                           <label for="nombre" class="form-label">Nombre Paciente</label>
-                          <input type="text" class="form-control" id="nombre">
+                          <input type="text" class="form-control" id="nombre" name="nombre">
                         </div>
                         <div class="mb-3">
                           <label for="apellido" class="form-label">Apellido Paciente</label>
-                          <input type="text" class="form-control" id="apellido">
+                          <input type="text" class="form-control" id="apellido" name="apellido">
                         </div>
                         <div class="mb-3">
                           <label for="edad" class="form-label">Edad Paciente</label>
-                          <input type="number" class="form-control" id="edad">
+                          <input type="number" class="form-control" id="edad" name="edad">
                         </div>
                         <button type="submit" class="btn btn-primary">Submit</button>
                     </form>

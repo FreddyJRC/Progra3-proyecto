@@ -31,25 +31,25 @@ public class Database {
 
     private void inicializarMedicosConHorarios() {
         Medico m1 = new Medico(1, "Freddy", "Ramirez", "Cardiologia");
-        Map<String, List<String>> agenda1 = new HashMap<>();
-        agenda1.put("2026-01-01", Arrays.asList("07:00", "08:00", "09:00","10:00", "11:00", "12:00"));
-        agenda1.put("2025-01-02", Arrays.asList("07:00", "08:00", "09:00","10:00", "11:00", "12:00"));
+        Map<String, ArrayList<String>> agenda1 = new HashMap<>();
+        agenda1.put("2026-01-01", new ArrayList<>(Arrays.asList("07:00", "08:00", "09:00","10:00", "11:00", "12:00")));
+        agenda1.put("2026-01-02", new ArrayList<>(Arrays.asList("07:00", "08:00", "09:00","10:00", "11:00", "12:00")));
         m1.setHorariosDisponibles(agenda1);
         medicos.put(1, m1);
 
        
         Medico m2 = new Medico(2, "Jose", "Martinez", "General");
-        Map<String, List<String>> agenda2 = new HashMap<>();
-        agenda2.put("2026-01-01", Arrays.asList("07:00", "08:00", "09:00","10:00", "11:00", "12:00"));
-        agenda2.put("2026-01-02", Arrays.asList("07:00", "08:00", "09:00","10:00", "11:00", "12:00"));
+        Map<String, ArrayList<String>> agenda2 = new HashMap<>();
+        agenda2.put("2026-01-01", new ArrayList<>(Arrays.asList("07:00", "08:00", "09:00","10:00", "11:00", "12:00")));
+        agenda2.put("2026-01-02", new ArrayList<>(Arrays.asList("07:00", "08:00", "09:00","10:00", "11:00", "12:00")));
         m2.setHorariosDisponibles(agenda2);
         medicos.put(2, m2);
 
         
-        Medico m3 = new Medico(3, "Pedro", "Ruiz", "Pediatria");
-        Map<String, List<String>> agenda3 = new HashMap<>();
-        agenda3.put("2026-01-01", Arrays.asList("07:00", "08:00", "09:00","10:00", "11:00", "12:00"));
-        agenda3.put("2026-01-02", Arrays.asList("07:00", "08:00", "09:00","10:00", "11:00", "12:00"));
+        Medico m3 = new Medico(3, "Matthew", "Flores", "Pediatria");
+        Map<String, ArrayList<String>> agenda3 = new HashMap<>();
+        agenda3.put("2026-01-01", new ArrayList<>(Arrays.asList("07:00", "08:00", "09:00","10:00", "11:00", "12:00")));
+        agenda3.put("2026-01-02", new ArrayList<>(Arrays.asList("07:00", "08:00", "09:00","10:00", "11:00", "12:00")));
         m3.setHorariosDisponibles(agenda3);
         medicos.put(3, m3);
     }
@@ -82,7 +82,7 @@ public class Database {
         }
     }
 
-    public Map<String, List<String>> getAgendaMedico(int idMedico) {
+    public Map<String, ArrayList<String>> getAgendaMedico(int idMedico) {
         lock.readLock().lock();
         try {
             Thread.sleep(2000);
@@ -146,24 +146,22 @@ public class Database {
         }
     }
 
-    public Cita crearCita(int pacienteId, int medicoId, LocalDate fecha, LocalTime hora) throws Exception {
+    public Cita crearCita(int pacienteId, int medicoId, String fecha, String hora) throws Exception {
         lock.writeLock().lock();
         try {
             System.out.println("Creación de cita para paciente " + pacienteId +
                                " con medico " + medicoId + " en " + Thread.currentThread().getName());
-            Thread.sleep(12000);
+            Thread.sleep(5000);
 
             Medico m = medicos.get(medicoId);
             if (m == null) throw new Exception("Medico no encontrado");
             Paciente p = pacientes.get(pacienteId);
             if (p == null) throw new Exception("Paciente no registrado");
 
-            String fechaStr = fecha.toString();
-            String horaStr = hora.toString();
-            if (!m.getHorasDisponibles(fechaStr).contains(horaStr))
+            if (!m.getHorasDisponibles(fecha).contains(hora))
                 throw new Exception("Horario no disponible");
 
-            if (!m.reservarHora(fechaStr, horaStr))
+            if (!m.reservarHora(fecha, hora))
                 throw new Exception("Error al reservar hora");
 
             int id = nextCitaId++;

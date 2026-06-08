@@ -4,8 +4,8 @@
     Author     : freddyramirez
 --%>
 
+<%@page import="java.util.List"%>
 <%@page import="Modelo.Medico"%>
-<%@page import="java.util.ArrayList"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html>
@@ -56,7 +56,7 @@
                     <tbody>
                         <%
                             if (request.getAttribute("medicos") != null) {
-                                ArrayList<Medico> medicos = (ArrayList<Medico>) request.getAttribute("medicos");
+                                List<Medico> medicos = (List<Medico>) request.getAttribute("medicos");
                                 for (Medico m : medicos) {
                         %>
                         <tr data-href="medico/citas?id=<%= m.getMedico_id() %>">

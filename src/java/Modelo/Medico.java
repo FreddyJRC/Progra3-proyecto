@@ -15,7 +15,7 @@ public class Medico {
     private String nombre;
     private String apellido;
     private String especialidad;
-    private Map<String, List<String>> agenda;
+    private Map<String, ArrayList<String>> agenda;
 
     public Medico(int medico_id, String nombre, String apellido, String especialidad) {
         this.medico_id = medico_id;
@@ -37,25 +37,28 @@ public class Medico {
     public String getEspecialidad() {
         return especialidad;
     }
-    public Map<String, List<String>> getAgenda() {
+    public Map<String, ArrayList<String>> getAgenda() {
         return new HashMap<>(agenda);
     }
 
-    public void setHorariosDisponibles(Map<String, List<String>> horarios) {
+    public void setHorariosDisponibles(Map<String, ArrayList<String>> horarios) {
         agenda.clear();
         agenda.putAll(horarios);
     }
 
-    public List<String> getHorasDisponibles(String fecha) {
-        return agenda.getOrDefault(fecha, new ArrayList<>());
+    public ArrayList<String> getHorasDisponibles(String fecha) {
+        return this.agenda.getOrDefault(fecha, new ArrayList<>());
     }
 
     public boolean reservarHora(String fecha, String hora) {
-        List<String> horas = agenda.get(fecha);
+        ArrayList<String> horas = this.agenda.get(fecha);
+        System.out.println(horas);
         if (horas != null && horas.contains(hora)) {
             horas.remove(hora);
+            System.out.print(horas);
+            this.agenda.put(fecha, horas);
             if (horas.isEmpty()) {
-                agenda.remove(fecha);
+                this.agenda.remove(fecha);
             }
             return true;
         }

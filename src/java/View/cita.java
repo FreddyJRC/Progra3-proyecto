@@ -4,6 +4,10 @@
  */
 package View;
 
+import Modelo.Cita;
+import Modelo.Database;
+import Modelo.Paciente;
+import Modelo.RequestsProcessor;
 import jakarta.servlet.RequestDispatcher;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -11,6 +15,9 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import java.time.LocalDate;
+import java.time.LocalTime;
+import java.util.concurrent.Future;
 
 /**
  *
@@ -60,6 +67,28 @@ public class cita extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+        
+        int pacienteId = Integer.parseInt(request.getParameter("paciente_id"));
+        int medicoId = Integer.parseInt(request.getParameter("medico_id"));
+        String fecha = request.getParameter("fecha");
+        String hora = request.getParameter("hora");
+        
+        Future<?> future = RequestsProcessor.getInstance().submit(() -> {
+            try {
+                Cita cita = Database.getInstance().crearCita(pacienteId, medicoId, fecha, hora);
+                request.setAttribute("mensaje", "Cita registrada");
+                request.setAttribute("cita", cita);
+            } catch (Exception e) {
+                request.setAttribute("error", e.getMessage());
+            }
+        });
+        
+        try {
+            future.get();
+        } catch (Exception e) {
+            throw new ServletException("Error al registrar cita", e);
+        }
+        
         processRequest(request, response);
     }
 

@@ -4,6 +4,7 @@
     Author     : freddyramirez
 --%>
 
+<%@page import="Modelo.Paciente"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html>
@@ -41,6 +42,18 @@
         
         <div class="container">
             <div class="row">
+                <div class="col">
+                    <%
+                        if (request.getAttribute("error") != null) {
+                            String err = (String) request.getAttribute("error");
+                    %>
+                        <div class="alert alert-primary" role="alert">
+                            <%= err %>
+                        </div>
+                    <% } %>
+                </div>
+            </div>
+            <div class="row">
               <div class="col">
                 <table class="table table-hover">
                     <thead>
@@ -52,12 +65,17 @@
                       </tr>
                     </thead>
                     <tbody>
+                        <%
+                            if (request.getAttribute("paciente") != null) {
+                                Paciente cita = (Paciente) request.getAttribute("paciente");
+                        %>
                       <tr data-href="medico/citas?id=1">
-                        <th scope="row">1</th>
-                        <td>Mark</td>
-                        <td>Otto</td>
-                        <td>@mdo</td>
+                          <th scope="row"><%= cita.getPaciente_id() %></th>
+                          <td><%= cita.getNombre() %></td>
+                          <td><%= cita.getApellido() %></td>
+                          <td><%= cita.getEdad() %></td>
                       </tr>
+                      <% } %>
                     </tbody>
                 </table>
               </div>

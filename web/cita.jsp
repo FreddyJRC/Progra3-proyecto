@@ -40,28 +40,47 @@
           </nav>
         
         <div class="container">
-
+            <div class="row">
+                <div class="col">
+                    <%
+                        if (request.getAttribute("mensaje") != null) {
+                            String msj = (String) request.getAttribute("mensaje");
+                    %>
+                        <div class="alert alert-primary" role="alert">
+                            <%= msj %>
+                        </div>
+                    <% } %>
+                    <%
+                        if (request.getAttribute("error") != null) {
+                            String err = (String) request.getAttribute("error");
+                    %>
+                        <div class="alert alert-danger" role="alert">
+                            <%= err %>
+                        </div>
+                    <% } %>
+                </div>
+            </div>
             <div class="row">
                 <div class="col">
                     <h2>Crear Cita</h2>
-                    <form>
+                    <form method="POST">
                         <div class="mb-3">
                           <label for="paciente_id" class="form-label">DPI Paciente</label>
-                          <input type="number" class="form-control" id="paciente_id">
-                        </div
+                          <input type="number" class="form-control" id="paciente_id" name="paciente_id">
+                        </div>
                         <div class="mb-3">
                           <label for="medico_id" class="form-label">ID Medico</label>
-                          <input type="number" class="form-control" id="medico_id">
+                          <input type="number" class="form-control" id="medico_id" name="medico_id">
                         </div>
                         <div class="mb-3">
                           <label for="fecha" class="form-label">Fecha</label>
-                          <input type="date" class="form-control" id="fecha">
+                          <input type="date" class="form-control" id="fecha" name="fecha">
                         </div>
                         <div class="mb-3">
                           <label for="hora" class="form-label">Hora</label>
-                          <input type="time" class="form-control" id="hora">
+                          <input type="time" class="form-control" id="hora" name="hora">
                         </div>
-                        <button type="submit" class="btn btn-primary">Submit</button>
+                        <button type="submit" class="btn btn-primary">Guardar</button>
                     </form>
                 </div>
             </div>

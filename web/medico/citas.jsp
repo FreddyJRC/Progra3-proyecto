@@ -4,6 +4,11 @@
     Author     : freddyramirez
 --%>
 
+<%@page import="java.util.ArrayList"%>
+<%@page import="Modelo.Cita"%>
+<%@page import="java.util.Map"%>
+<%@page import="java.util.List"%>
+<%@page import="Modelo.Medico"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html>
@@ -41,7 +46,42 @@
         
         <div class="container">
             <div class="row">
-              <div class="col-md-6 offset-md-3">
+                <div class="col">
+                  <h2>Horario</h2>
+                <table class="table">
+                    <thead>
+                      <tr>
+                        <th scope="col">Fecha</th>
+                        <th scope="col">Hora</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <%
+                            if (request.getAttribute("medico") != null) {
+                                Medico medico = (Medico) request.getAttribute("medico");
+                                Map<String, ArrayList<String>> citas = medico.getAgenda();
+                                for (Map.Entry<String, ArrayList<String>> m : citas.entrySet()) {
+                        %>
+                        <tr>
+                            <td class="align-middle"
+                                rowspan="<%= m.getValue().size() + 1 %>">
+                                <%= m.getKey() %>
+                            </td>
+                        </tr>
+                        <%
+                                    for (String hora : m.getValue()) {
+                        %>
+                        <tr>
+                            <td><%= hora %></td>
+                        </tr>
+                        <% }}} %>
+                    </tbody>
+                </table>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col">
+                  <h2>Citas</h2>
                 <table class="table table-hover">
                     <thead>
                       <tr>
@@ -55,17 +95,27 @@
                       </tr>
                     </thead>
                     <tbody>
+                        <%
+                            if (request.getAttribute("citas") != null) {
+                                ArrayList<Cita> citas = (ArrayList<Cita>) request.getAttribute("citas");
+                                for (Cita cita : citas) {
+                        %>
                       <tr>
-                        <th scope="row">1</th>
-                        <td>Mark</td>
-                        <td>Otto</td>
-                        <td>@mdo</td>
-                        <td>@mdo</td>
-                        <td>@mdo</td>
+                          <th scope="row"><%= cita.getCita_id() %></th>
+                          <td><%= cita.getPaciente_id() %></td>
+                          <td><%= cita.getMedico_id() %></td>
+                          <td><%= cita.getFecha() %></td>
+                          <td><%= cita.getHora() %></td>
+                          <td><%= cita.getEstado() %></td>
                         <td>
-                            <button type="button" class="btn btn-outline-success btn-sm">Atender</button>
+                            <form method="POST">
+                                <input type="hidden" name="cita_id" value="<%= cita.getCita_id() %>">
+                                <input type="hidden" name="estado" value="ATENDIDA">
+                                <button type="submit" class="btn btn-outline-success btn-sm">Atender</button>
+                            </form>
                         </td>
                       </tr>
+                      <% }} %>
                     </tbody>
                 </table>
               </div>
